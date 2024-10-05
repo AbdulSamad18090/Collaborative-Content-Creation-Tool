@@ -163,6 +163,10 @@ export default function AdvancedDashboardComponent() {
     setDocuments(items);
   };
 
+  const profileImage =
+    session?.user?.image ||
+    "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9ImN1cnJlbnRDb2xvciIgc3Ryb2tlLXdpZHRoPSIyIiBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1saW5lam9pbj0icm91bmQiIGNsYXNzPSJsdWNpZGUgbHVjaWRlLXVzZXIiPjxwYXRoIGQ9Ik0xOSAyMXYtMmE0IDQgMCAwIDAtNC00SDlhNCA0IDAgMCAwLTQgNHYyIi8+PGNpcmNsZSBjeD0iMTIiIGN5PSI3IiByPSI0Ii8+PC9zdmc+";
+
   return (
     session && (
       <div className="flex h-screen bg-gray-100 dark:bg-gray-900 text-gray-800 dark:text-gray-200">
@@ -213,6 +217,7 @@ export default function AdvancedDashboardComponent() {
               onClick={() => {
                 signOut({
                   callbackUrl: "/",
+                  redirect: false,
                 });
               }}
             >
@@ -241,7 +246,7 @@ export default function AdvancedDashboardComponent() {
                       </div>
                       <Input
                         id="search"
-                        className="block w-full pl-10 pr-3 py-2 border border-neutral-200 border-gray-300 rounded-md leading-5 bg-white dark:bg-gray-700 placeholder-gray-500 focus:outline-none focus:placeholder-gray-400 focus:ring-1 focus:ring-blue-500 focus:border-blue-500 sm:text-sm dark:border-neutral-800"
+                        className="block w-full pl-10 pr-3 py-2 border border-gray-300 rounded-md leading-5 bg-white dark:bg-gray-700 placeholder-gray-500 focus:outline-none focus:placeholder-gray-400 focus:ring-1 focus:ring-gray-500 focus:border-gray-500 sm:text-sm dark:border-neutral-800"
                         placeholder="Search documents, tasks, team members..."
                         type="search"
                       />
@@ -249,16 +254,16 @@ export default function AdvancedDashboardComponent() {
                   </div>
                 </div>
                 <div className="flex items-center">
-                  <button className="flex-shrink-0 p-1 rounded-full hover:bg-gray-100 dark:hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 relative">
+                  <button className="flex-shrink-0 p-1 rounded-full hover:bg-gray-100 dark:hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-black relative">
                     <Bell className="h-6 w-6" />
                     <span className="absolute top-0 right-0 block h-2 w-2 rounded-full bg-red-400 ring-2 ring-white dark:ring-gray-800" />
                   </button>
                   <div className="ml-3 relative">
                     <div>
-                      <button className="flex text-sm rounded-full focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 items-center">
+                      <button className="flex text-sm rounded-full focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-black items-center">
                         <img
                           className="h-8 w-8 rounded-full"
-                          src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
+                          src={profileImage}
                           alt="User avatar"
                         />
                         <ChevronDown className="ml-1 h-4 w-4 text-gray-400" />
@@ -276,7 +281,7 @@ export default function AdvancedDashboardComponent() {
               <h1 className="text-2xl font-semibold mb-6">Dashboard</h1>
 
               {/* Quick Stats */}
-              <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-6">
+              <div className="grid grid-cols-1 md:grid-cols-4 gap-2 mb-6">
                 {[
                   {
                     label: "Total Documents",
@@ -286,21 +291,21 @@ export default function AdvancedDashboardComponent() {
                     trend: "up",
                   },
                   {
-                    label: "Active Projects",
+                    label: "In Progress",
                     value: "12",
                     icon: TrendingUp,
                     change: 2,
                     trend: "up",
                   },
                   {
-                    label: "Team Members",
+                    label: "In Review",
                     value: "38",
                     icon: Users,
                     change: 5,
                     trend: "up",
                   },
                   {
-                    label: "Completed Tasks",
+                    label: "Completed",
                     value: "643",
                     icon: Calendar,
                     change: 8,
@@ -332,14 +337,14 @@ export default function AdvancedDashboardComponent() {
                       </p>
                     </div>
                     <div className="ml-4">
-                      <stat.icon className="h-12 w-12 text-blue-500 opacity-75" />
+                      <stat.icon className="h-12 w-12 text-yellow-500 opacity-75" />
                     </div>
                   </div>
                 ))}
               </div>
 
               {/* Charts Section */}
-              <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-2 mb-6">
                 {/* Activity Chart */}
                 <div className="bg-white dark:bg-gray-800 rounded-lg shadow p-6">
                   <h2 className="text-lg font-semibold mb-4">

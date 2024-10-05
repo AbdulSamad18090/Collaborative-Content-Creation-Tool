@@ -28,9 +28,14 @@ export default function Signup() {
     };
   }, []);
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log("Signup attempt with:", name, email, password);
+    await signIn("signup", {
+      callbackUrl: "/dashboard",
+      name: name,
+      email: email,
+      password: password,
+    });
   };
 
   return (
@@ -145,7 +150,6 @@ export default function Signup() {
             </div>
 
             <Button
-              type="submit"
               className="group relative w-full flex justify-center py-2 px-4 border border-neutral-200 border-transparent text-sm font-medium rounded-md text-black bg-white hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-black transition-all duration-300 ease-in-out transform hover:scale-105"
               onClick={() => {
                 signIn("google", {
