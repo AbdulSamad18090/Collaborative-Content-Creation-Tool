@@ -44,7 +44,7 @@ export function PricingSection() {
 
 function PricingCard({ title, price, features, isFeatured }) {
   return (
-    <div className={`flex flex-col p-6 rounded-lg shadow-lg ${isFeatured ? 'bg-neutral-900 text-neutral-50 scale-105' : 'bg-white border border-neutral-200 dark:bg-neutral-950 dark:border-neutral-800'}`}>
+    <div className={`flex flex-col p-6 rounded-lg shadow-lg ${isFeatured ? 'bg-neutral-900 text-neutral-50 scale-110' : 'bg-white border border-neutral-200 dark:bg-neutral-950 dark:border-neutral-800'}`}>
       <h3 className="text-2xl font-semibold mb-4">{title}</h3>
       <p className="text-4xl font-bold mb-6">{price}</p>
       <ul className="mb-6 space-y-2">
@@ -52,7 +52,7 @@ function PricingCard({ title, price, features, isFeatured }) {
           <li key={index}>{feature}</li>
         ))}
       </ul>
-      <Button className="mt-auto">{isFeatured ? "Choose Plan" : "Contact Sales"}</Button>
+      <Button className={`mt-auto ${isFeatured && "bg-white text-black hover:bg-gray-200"}`}>{isFeatured ? "Choose Plan" : "Contact Sales"}</Button>
     </div>
   );
 }

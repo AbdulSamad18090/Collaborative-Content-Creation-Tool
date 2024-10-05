@@ -7,7 +7,7 @@ import { Label } from "@/components/ui/label";
 import { Pen, Zap, Eye, EyeOff } from "lucide-react";
 import Link from "next/link";
 import { FcGoogle } from "react-icons/fc";
-
+import { signIn } from "next-auth/react";
 
 export default function Signup() {
   const [name, setName] = useState("");
@@ -147,10 +147,14 @@ export default function Signup() {
             <Button
               type="submit"
               className="group relative w-full flex justify-center py-2 px-4 border border-neutral-200 border-transparent text-sm font-medium rounded-md text-black bg-white hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-black transition-all duration-300 ease-in-out transform hover:scale-105"
+              onClick={() => {
+                signIn("google", {
+                  callbackUrl: "/dashboard",
+                });
+              }}
             >
               <span className="absolute left-0 inset-y-0 flex items-center pl-3">
-              <FcGoogle className='text-2xl' />
-
+                <FcGoogle className="text-2xl" />
               </span>
               Continue with Google
             </Button>

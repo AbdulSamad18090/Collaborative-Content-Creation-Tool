@@ -1,6 +1,8 @@
 import { Button } from "@/components/ui/button";
+import { useRouter } from "next/navigation";
 
 export function HeroSection() {
+  const router = useRouter()
     return (
       <section id="home" className="py-20 px-4 text-center">
         <h1 className="text-4xl font-extrabold tracking-tight sm:text-5xl md:text-6xl">
@@ -11,7 +13,9 @@ export function HeroSection() {
           Empower your team with our advanced collaborative content creation tool. Streamline your workflow, boost productivity, and create amazing content together.
         </p>
         <div className="mt-10 flex justify-center space-x-4">
-          <Button size="lg">Get Started</Button>
+          <Button size="lg" onClick={() => {
+                router.push('/auth/signup')
+              }}>Get Started</Button>
           <Button size="lg" variant="outline">Learn More</Button>
         </div>
       </section>
