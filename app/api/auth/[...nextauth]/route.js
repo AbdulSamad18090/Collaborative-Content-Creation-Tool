@@ -80,9 +80,11 @@ const authOptions = {
     }),
   ],
   session: {
-    strategy: "jwt", // Use JSON Web Tokens for sessions
-    maxAge: 24 * 60 * 60, // Session max age in seconds (1 day)
+    strategy: "jwt",
+    maxAge: 24 * 60 * 60, // 1 day session expiration
+    updateAge: 60 * 60, // JWT is updated every hour
   },
+
   callbacks: {
     async signIn({ user, account, profile, credentials }) {
       try {
@@ -180,6 +182,7 @@ const authOptions = {
     newUser: null, // Disable the new account creation screen
   },
   debug: process.env.NODE_ENV === "development", // Enable debug messages in development
+  secret: process.env.NEXTAUTH_SECRET,
 };
 
 const handler = NextAuth(authOptions);
