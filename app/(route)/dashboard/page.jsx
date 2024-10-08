@@ -5,10 +5,10 @@ import { useRouter } from "next/navigation";
 import DahsboardHeader from "./_components/header/page";
 import DahsboardSideBar from "./_components/sidebar/page";
 import MainDashboard from "./_components/main/page";
-import Team from "./_components/team/page";
+import Collaborators from "./_components/collaborators/page";
 import CalendarTab from "./_components/calendar/page";
 import Documents from "./_components/documents/page";
-import Messages from "./_components/messages/page";
+import Comments from "./_components/comments/page";
 import SettingsTab from "./_components/settings/page";
 
 export default function AdvancedDashboardComponent() {
@@ -45,7 +45,7 @@ export default function AdvancedDashboardComponent() {
 
   return (
     session && (
-      <div className="flex h-screen bg-gray-100 dark:bg-gray-900 text-gray-800 dark:text-gray-200">
+      <div className="flex h-screen bg-gray-100 dark:bg-gray-900 text-gray-800 dark:text-gray-200 overflow-auto">
         {/* Sidebar */}
         <DahsboardSideBar
           isSidebarOpen={isSidebarOpen}
@@ -61,9 +61,9 @@ export default function AdvancedDashboardComponent() {
           {/* Dashboard Content */}
           {activeTab === "dashboard" && <MainDashboard />}
           {activeTab === "documents" && <Documents />}
-          {activeTab === "team" && <Team />}
-          {activeTab === "calendar" && <CalendarTab />}
-          {activeTab === "messages" && <Messages />}
+          {activeTab === "collaborators" && <Collaborators />}
+          {/* {activeTab === "calendar" && <CalendarTab />} */}
+          {activeTab === "comments" && <Comments />}
           {activeTab === "settings" && <SettingsTab />}
         </div>
       </div>

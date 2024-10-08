@@ -3,6 +3,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Bell, ChevronDown, Menu, Search } from "lucide-react";
 import { useSession } from "next-auth/react";
+import Image from "next/image";
 import React from "react";
 
 const DahsboardHeader = ({ toggleSidebar }) => {
@@ -11,6 +12,8 @@ const DahsboardHeader = ({ toggleSidebar }) => {
   const profileImage =
     session?.user?.image ||
     "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9ImN1cnJlbnRDb2xvciIgc3Ryb2tlLXdpZHRoPSIyIiBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1saW5lam9pbj0icm91bmQiIGNsYXNzPSJsdWNpZGUgbHVjaWRlLXVzZXIiPjxwYXRoIGQ9Ik0xOSAyMXYtMmE0IDQgMCAwIDAtNC00SDlhNCA0IDAgMCAwLTQgNHYyIi8+PGNpcmNsZSBjeD0iMTIiIGN5PSI3IiByPSI0Ii8+PC9zdmc+";
+
+  console.log(profileImage);
 
   return (
     <header className="bg-white dark:bg-gray-800 shadow-sm z-10">
@@ -45,10 +48,12 @@ const DahsboardHeader = ({ toggleSidebar }) => {
             <div className="ml-3 relative">
               <div>
                 <button className="flex text-sm rounded-full focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-black items-center">
-                  <img
+                  <Image
                     className="h-8 w-8 rounded-full"
                     src={profileImage}
                     alt="User avatar"
+                    width={100}
+                    height={100}
                   />
                   <ChevronDown className="ml-1 h-4 w-4 text-gray-400" />
                 </button>

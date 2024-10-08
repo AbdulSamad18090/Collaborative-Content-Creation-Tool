@@ -1,20 +1,20 @@
 "use client";
-import { Avatar, AvatarImage } from "@/components/ui/avatar";
+
+import React, { useState } from "react";
+import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
-import { AvatarFallback } from "@radix-ui/react-avatar";
 import {
   ArrowDownRight,
   ArrowUpRight,
-  Calendar,
+  Calendar as CalendarIcon,
   FileText,
   MoreVertical,
   Plus,
   TrendingUp,
   Users,
 } from "lucide-react";
-import React from "react";
 import { DragDropContext, Draggable, Droppable } from "react-beautiful-dnd";
 import {
   LineChart,
@@ -28,6 +28,12 @@ import {
   Tooltip,
   ResponsiveContainer,
 } from "recharts";
+import { Calendar } from "@/components/ui/calendar";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
 
 const activityData = [
   { name: "Mon", documents: 4, collaborators: 3, comments: 7 },
@@ -38,13 +44,16 @@ const activityData = [
   { name: "Sat", documents: 1, collaborators: 1, comments: 2 },
   { name: "Sun", documents: 0, collaborators: 0, comments: 1 },
 ];
+
 const pieChartData = [
   { name: "Documents", value: 400 },
   { name: "Tasks", value: 300 },
   { name: "Discussions", value: 200 },
   { name: "Files", value: 100 },
 ];
+
 const COLORS = ["#0088FE", "#00C49F", "#FFBB28", "#FF8042"];
+
 const teamMembers = [
   {
     id: 1,
@@ -66,6 +75,7 @@ const teamMembers = [
     avatar: "/avatars/diana.jpg",
   },
 ];
+
 const recentDocuments = [
   {
     id: 1,
@@ -102,6 +112,9 @@ const recentDocuments = [
 ];
 
 const MainDashboard = () => {
+  const [date, setDate] = useState(new Date());
+  const [documents, setDocuments] = useState(recentDocuments);
+
   const onDragEnd = (result) => {
     if (!result.destination) return;
 
@@ -115,10 +128,31 @@ const MainDashboard = () => {
   return (
     <main className="flex-1 overflow-y-auto bg-gray-100 dark:bg-gray-900 p-4">
       <div className="max-w-7xl mx-auto">
-        <h1 className="text-2xl font-semibold mb-6">Dashboard</h1>
+        <div className="flex items-center justify-between gap-4 mb-6">
+          <h1 className="text-3xl font-semibold">Dashboard</h1>
+          <Popover>
+            <PopoverTrigger asChild>
+              <Button
+                variant="outline"
+                className="w-[280px] justify-start text-left font-normal"
+              >
+                <CalendarIcon className="mr-2 h-4 w-4" />
+                {date ? date.toDateString() : <span>Pick a date</span>}
+              </Button>
+            </PopoverTrigger>
+            <PopoverContent className="w-auto p-0">
+              <Calendar
+                mode="single"
+                selected={date}
+                onSelect={setDate}
+                initialFocus
+              />
+            </PopoverContent>
+          </Popover>
+        </div>
 
         {/* Quick Stats */}
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-2 mb-6">
+        <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-2 mb-6">
           {[
             {
               label: "Total Documents",
@@ -144,7 +178,7 @@ const MainDashboard = () => {
             {
               label: "Completed",
               value: "643",
-              icon: Calendar,
+              icon: CalendarIcon,
               change: 8,
               trend: "down",
             },
@@ -160,12 +194,10 @@ const MainDashboard = () => {
                 <p className="text-2xl font-bold">{stat.value}</p>
                 <p
                   className={`text-sm ${
-                    stat.trend === "'up'"
-                      ? "'text-green-600'"
-                      : "'text-red-600'"
+                    stat.trend === "up" ? "text-green-600" : "text-red-600"
                   } flex items-center mt-1`}
                 >
-                  {stat.trend === "'up'" ? (
+                  {stat.trend === "up" ? (
                     <ArrowUpRight className="h-4 w-4 mr-1" />
                   ) : (
                     <ArrowDownRight className="h-4 w-4 mr-1" />
@@ -258,7 +290,7 @@ const MainDashboard = () => {
                     ref={provided.innerRef}
                     className="divide-y divide-gray-200 dark:divide-gray-700"
                   >
-                    {recentDocuments.map((doc, index) => (
+                    {documents.map((doc, index) => (
                       <Draggable
                         key={doc.id}
                         draggableId={doc.id.toString()}
@@ -285,11 +317,11 @@ const MainDashboard = () => {
                             <div className="flex items-center">
                               <Badge
                                 variant={
-                                  doc.status === "'In Progress'"
-                                    ? "'default'"
-                                    : doc.status === "'Review'"
-                                    ? "'secondary'"
-                                    : "'outline'"
+                                  doc.status === "In Progress"
+                                    ? "default"
+                                    : doc.status === "Review"
+                                    ? "secondary"
+                                    : "outline"
                                 }
                                 className="mr-2 rounded-full"
                               >
@@ -338,9 +370,9 @@ const MainDashboard = () => {
                     <AvatarImage src={member.avatar} alt={member.name} />
                     <AvatarFallback>
                       {member.name
-                        .split("'")
+                        .split(" ")
                         .map((n) => n[0])
-                        .join("''")}
+                        .join("")}
                     </AvatarFallback>
                   </Avatar>
                   <div>
