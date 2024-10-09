@@ -29,11 +29,11 @@ export default function Login() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    await signIn('login', {
-      callbackUrl: '/dashboard',
+    await signIn("login", {
+      callbackUrl: "/dashboard",
       email: email,
       password: password,
-    })
+    });
   };
 
   return (
@@ -41,8 +41,10 @@ export default function Login() {
       <div
         className="absolute inset-0 bg-white/[0.02] bg-[size:50px_50px]"
         style={{
-          maskImage: "radial-gradient(ellipse at center, black, transparent 75%)",
-          WebkitMaskImage: "radial-gradient(ellipse at center, black, transparent 75%)",
+          maskImage:
+            "radial-gradient(ellipse at center, black, transparent 75%)",
+          WebkitMaskImage:
+            "radial-gradient(ellipse at center, black, transparent 75%)",
         }}
       />
       <div
@@ -58,7 +60,9 @@ export default function Login() {
       <div className="max-w-md w-full space-y-8 bg-white bg-opacity-5 p-8 rounded-xl backdrop-blur-sm relative z-10 border border-neutral-200 border-black/10 shadow-2xl">
         <div className="text-center">
           <Pen className="mx-auto h-12 w-12 text-white" />
-          <h2 className="mt-6 text-3xl font-extrabold text-white">Sign in to your account</h2>
+          <h2 className="mt-6 text-3xl font-extrabold text-white">
+            Sign in to your account
+          </h2>
         </div>
         <form className="mt-8 space-y-6" onSubmit={handleSubmit}>
           <div className="rounded-md shadow-sm -space-y-px">
@@ -99,7 +103,10 @@ export default function Login() {
                 onClick={() => setShowPassword(!showPassword)}
               >
                 {showPassword ? (
-                  <EyeOff className="h-5 w-5 text-gray-400" aria-hidden="true" />
+                  <EyeOff
+                    className="h-5 w-5 text-gray-400"
+                    aria-hidden="true"
+                  />
                 ) : (
                   <Eye className="h-5 w-5 text-gray-400" aria-hidden="true" />
                 )}
@@ -115,7 +122,10 @@ export default function Login() {
                 type="checkbox"
                 className="h-4 w-4 text-black focus:ring-black border-black rounded bg-black"
               />
-              <Label htmlFor="remember-me" className="ml-2 block text-sm text-gray-300">
+              <Label
+                htmlFor="remember-me"
+                className="ml-2 block text-sm text-gray-300"
+              >
                 Remember me
               </Label>
             </div>
@@ -136,10 +146,7 @@ export default function Login() {
               className="group relative w-full flex justify-center py-2 px-4 border border-neutral-200 border-transparent text-sm font-medium rounded-md text-black bg-white hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-black transition-all duration-300 ease-in-out transform hover:scale-105"
             >
               <span className="absolute left-0 inset-y-0 flex items-center pl-3">
-                <Zap
-                  className="h-5 w-5 transition-colors"
-                  aria-hidden="true"
-                />
+                <Zap className="h-5 w-5 transition-colors" aria-hidden="true" />
               </span>
               Sign in
             </Button>
@@ -152,15 +159,14 @@ export default function Login() {
 
             <Button
               className="group relative w-full flex justify-center py-2 px-4 border border-neutral-200 border-transparent text-sm font-medium rounded-md text-black bg-white hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-black transition-all duration-300 ease-in-out transform hover:scale-105"
-                onClick={()=>{
-                  signIn('google', {
-                    callbackUrl: "/dashboard",
-                  })
-                }}
+              onClick={() => {
+                signIn("google", {
+                  callbackUrl: "/dashboard",
+                });
+              }}
             >
               <span className="absolute left-0 inset-y-0 flex items-center pl-3">
-              <FcGoogle className='text-2xl' />
-
+                <FcGoogle className="text-2xl" />
               </span>
               Continue with Google
             </Button>
@@ -168,7 +174,7 @@ export default function Login() {
         </form>
         <div className="text-center">
           <p className="mt-2 text-sm text-gray-400">
-            Don't have an account?{" "}
+            Don&apos;t have an account?{" "}
             <Link
               href="/auth/signup"
               className="font-medium text-gray-300 hover:text-gray-200 transition-colors"
