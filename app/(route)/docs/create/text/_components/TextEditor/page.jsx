@@ -78,7 +78,7 @@ const TextEditor = () => {
           <h3 className="font-semibold text-xl border-b border-gray-300 pb-2">Preview</h3>
           <div
             className="prose max-w-none" // Ensure max width isn't applied to prose
-            // dangerouslySetInnerHTML={{ __html: editorContent }}
+            dangerouslySetInnerHTML={{ __html: editorContent }}
           ></div>
         </div>
       </div>
