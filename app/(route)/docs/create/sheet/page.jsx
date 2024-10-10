@@ -2,7 +2,8 @@
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Download, Save } from "lucide-react";
+import { Download, Pen, Save } from "lucide-react";
+import Link from "next/link";
 import { useState, useEffect } from "react";
 import Spreadsheet from "react-spreadsheet";
 import * as XLSX from "xlsx";
@@ -24,6 +25,11 @@ const SpreadsheetEditor = () => {
     initializeData(defaultColumnCount, defaultRowCount)
   );
 
+  // Log the spreadsheet data whenever it changes
+  useEffect(() => {
+    console.log("Spreadsheet Data =>", data);
+  }, [data]); // Run effect when 'data' changes
+
   // Add a new row
   const addRow = () => {
     const newRow = data[0].map(() => ({ value: "" }));
@@ -44,21 +50,22 @@ const SpreadsheetEditor = () => {
     const workbook = XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(workbook, worksheet, "Sheet1");
     XLSX.writeFile(workbook, "spreadsheet.xlsx");
+
+    console.log("WorkSheet =>", worksheet);
   };
 
   return (
     <>
-      <div className="flex items-center justify-between flex-wrap gap-2 m-2">
-        <div className="space-x-2">
-          <Button variant="outline" onClick={addRow}>
-            Add Row
-          </Button>
-          <Button variant="outline" onClick={addColumn}>
-            Add Column
-          </Button>
-        </div>
-        <div className="flex items-center gap-2">
-          <Input placeholder="Enter File name" />
+      <div className="flex items-center justify-between flex-wrap gap-2 p-3 border-b">
+        <Link href="/dashboard" className="flex items-center space-x-2">
+          <Pen className="h-8 w-6 text-black" />
+          <span className="text-xl font-bold">ContentCollab</span>
+        </Link>
+        <div className="flex items-center gap-2 flex-wrap">
+          <Input
+            placeholder="Enter File name"
+            className="sm:w-[200px] w-full"
+          />
           <Button onClick={() => {}}>
             <Save className="h-4 w-4 mr-2" />
             Save
@@ -70,7 +77,15 @@ const SpreadsheetEditor = () => {
           </Button>
         </div>
       </div>
-      <div className="overflow-x-auto min-w-full">
+      <div className="space-x-2 m-3 flex">
+        <Button  onClick={addRow}>
+          Add Row
+        </Button>
+        <Button  onClick={addColumn}>
+          Add Column
+        </Button>
+      </div>
+      <div className="overflow-x-auto min-w-full mb-2">
         <Spreadsheet data={data} onChange={setData} />
       </div>
     </>
