@@ -15,7 +15,7 @@ const TextDocument = () => {
     }
   }, [session]);
 
-  return session && <div>text Editor</div>;
+  return session && <TextEditor/>;
 };
 
 export default TextDocument;
