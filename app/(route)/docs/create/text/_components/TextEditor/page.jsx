@@ -11,6 +11,10 @@ import { saveAs } from "file-saver";
 // Dynamically import ReactQuill so it only loads in the browser
 const ReactQuill = dynamic(() => import("react-quill"), { ssr: false });
 
+const isMobileDevice = () => {
+  return typeof window !== "undefined" && /Mobi|Android/i.test(navigator.userAgent);
+};
+
 const RichTextEditor = () => {
   const [value, setValue] = useState("");
   const [isClient, setIsClient] = useState(false);
@@ -62,7 +66,21 @@ const RichTextEditor = () => {
   const exportAsDocx = () => {
     const htmlContent = value;
     const converted = htmlDocx.asBlob(htmlContent);
-    saveAs(converted, `${fileName}.docx`);
+
+    // Check if the device is mobile and handle download accordingly
+    if (isMobileDevice()) {
+      const url = URL.createObjectURL(converted);
+      const link = document.createElement("a");
+      link.href = url;
+      link.download = `${fileName}.docx`;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      URL.revokeObjectURL(url);
+    } else {
+      // For desktop or non-mobile browsers
+      saveAs(converted, `${fileName}.docx`);
+    }
   };
 
   useEffect(() => {
