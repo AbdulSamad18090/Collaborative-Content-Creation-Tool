@@ -201,6 +201,11 @@ body {
   list-style-type: disc;
 }
 
+.custom-preview a {
+  color: rgb(0, 115, 255);
+  text-decoration: underline;
+}
+
 /* Style for inserted images */
 .custom-preview img {
   display: block;

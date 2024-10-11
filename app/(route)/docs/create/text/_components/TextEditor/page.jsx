@@ -5,6 +5,8 @@ import dynamic from "next/dynamic";
 import Link from "next/link";
 import React, { useState, useEffect } from "react";
 import "react-quill/dist/quill.snow.css";
+import htmlDocx from "html-docx-js/dist/html-docx";
+import { saveAs } from "file-saver";
 
 // Dynamically import ReactQuill so it only loads in the browser
 const ReactQuill = dynamic(() => import("react-quill"), { ssr: false });
@@ -13,6 +15,7 @@ const RichTextEditor = () => {
   const [value, setValue] = useState("");
   const [isClient, setIsClient] = useState(false);
   const [isPreviewOpen, setIsPreviewOpen] = useState(false); // State to control sidebar visibility
+  const [fileName, setFileName] = useState("Document"); // State for the file name
 
   // Ensure this code runs only on the client side
   useEffect(() => {
@@ -55,6 +58,16 @@ const RichTextEditor = () => {
     setIsPreviewOpen(!isPreviewOpen);
   };
 
+  // Function to export content as .docx
+  const exportAsDocx = () => {
+    const htmlContent = value;
+    const converted = htmlDocx.asBlob(htmlContent);
+    saveAs(converted, `${fileName}.docx`);
+  };
+
+  useEffect(() => {
+    console.log("Value ==>", value);
+  }, [value]);
 
   return (
     <>
@@ -66,6 +79,8 @@ const RichTextEditor = () => {
         <div className="flex items-center gap-2 flex-wrap">
           <Input
             placeholder="Enter File name"
+            value={fileName}
+            onChange={(e) => setFileName(e.target.value)}
             className="sm:w-[200px] w-full"
           />
           <Button onClick={() => {}}>
@@ -73,7 +88,7 @@ const RichTextEditor = () => {
             Save
           </Button>
 
-          <Button variant="outline" onClick={() => {}}>
+          <Button variant="outline" onClick={exportAsDocx}>
             <Download className="h-4 w-4 mr-2" />
             Export
           </Button>
@@ -111,7 +126,7 @@ const RichTextEditor = () => {
               <Save className="h-4 w-4 mr-2" />
               Save
             </Button>
-            <Button onClick={() => {}}>
+            <Button onClick={exportAsDocx}>
               <Download className="h-4 w-4 mr-2" />
               Export
             </Button>
