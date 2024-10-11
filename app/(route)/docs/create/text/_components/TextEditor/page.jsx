@@ -55,6 +55,7 @@ const RichTextEditor = () => {
     setIsPreviewOpen(!isPreviewOpen);
   };
 
+
   return (
     <>
       <div className="flex items-center justify-between flex-wrap gap-2 p-3 border-b">
@@ -99,7 +100,7 @@ const RichTextEditor = () => {
 
       {/* Right Sidebar for Preview */}
       <div
-        className={`fixed top-0 right-0 md:w-1/2 w-full h-full bg-gray-50 border-l shadow-lg p-4 z-50 transform transition-transform duration-300 ease-in-out ${
+        className={`fixed top-0 right-0 overflow-y-auto md:w-1/2 w-full h-full bg-gray-50 border-l shadow-lg p-4 z-50 transform transition-transform duration-300 ease-in-out ${
           isPreviewOpen ? "translate-x-0" : "translate-x-full"
         }`}
       >
@@ -123,10 +124,10 @@ const RichTextEditor = () => {
             </Button>
           </div>
         </div>
-        <div className="overflow-y-auto h-full">
+        <div className=" h-full">
           <div
             dangerouslySetInnerHTML={{ __html: value }} // Render the HTML content
-            className="prose"
+            className="custom-preview"
           ></div>
         </div>
       </div>

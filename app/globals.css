@@ -17,3 +17,264 @@ body {
     --radius: 0.5rem;
   }
 }
+
+/* General paragraph styling */
+.custom-preview p {
+  margin: 0.25rem 0;
+  line-height: 1;
+}
+
+/* Headings styling */
+.custom-preview h1, .custom-preview h2, .custom-preview h3 {
+  margin: 0.5rem 0;
+  line-height: 1;
+  font-weight: bold;
+}
+
+.custom-preview h1 {
+  font-size: 2rem;
+}
+
+.custom-preview h2 {
+  font-size: 1.5rem;
+}
+
+.custom-preview h3 {
+  font-size: 1.25rem;
+}
+
+/* List styling */
+.custom-preview ul, .custom-preview ol {
+  margin: 0.25rem 0;
+  padding-left: 1rem;
+  line-height: 1;
+}
+
+.custom-preview ul {
+  list-style-type: disc;
+  margin-left: 30px;
+}
+
+.custom-preview ol {
+  list-style-type: decimal;
+  margin-left: 30px;
+}
+
+/* Bold text */
+.custom-preview b, .custom-preview strong {
+  font-weight: bold;
+}
+
+/* Italic text */
+.custom-preview i, .custom-preview em {
+  font-style: italic;
+}
+
+/* Underlined text */
+.custom-preview u {
+  text-decoration: underline;
+}
+
+/* Strikethrough text */
+.custom-preview s, .custom-preview strike, .custom-preview del {
+  text-decoration: line-through;
+}
+
+/* Code block */
+/* Inline code styling */
+.custom-preview code {
+  background-color: #f5f5f5;
+  color: #d63384; /* Customize color if needed */
+  border-radius: 4px;
+  padding: 2px 4px;
+  font-family: "Courier New", Courier, monospace;
+  font-size: 0.875rem;
+  display: inline;
+}
+
+/* Block code styling */
+.custom-preview pre {
+  background-color: rgb(4, 4, 46); /* Dark background for code blocks */
+  color: rgb(0, 255, 157);
+  padding: 1rem;
+  border-radius: 8px;
+  overflow-x: auto; /* Ensures long code lines are scrollable horizontally */
+  font-family: "Courier New", Courier, monospace;
+  font-size: 0.875rem;
+  line-height: 1.5;
+  margin: 1rem 0; /* Spacing around code blocks */
+  white-space: pre-wrap; /* Ensures code preserves formatting */
+}
+
+/* Optional: To highlight keywords or other elements in code blocks */
+/* .custom-preview pre .keyword {
+  color: #c678dd;
+  font-weight: bold;
+}
+
+.custom-preview pre .string {
+  color: #98c379;
+}
+
+.custom-preview pre .comment {
+  color: #5c6370;
+  font-style: italic;
+}
+
+.custom-preview pre .function {
+  color: #61afef;
+} */
+
+/* Additional padding for inline code within blockquotes */
+.custom-preview blockquote code {
+  background-color: #eee;
+  color: #d63384;
+  padding: 2px 6px;
+  border-radius: 4px;
+}
+
+
+/* Blockquote styling */
+.custom-preview blockquote {
+  border-left: 4px solid #ccc;
+  padding-left: 0.5rem;
+  color: #666;
+  margin: 0.5rem 0;
+}
+
+/* Bullet list styling */
+.custom-preview ul {
+  list-style-type: disc;
+  margin-left: 30px;
+}
+
+/* Numbered list styling */
+.custom-preview ol {
+  list-style-type: decimal;
+  margin-left: 30px;
+}
+
+/* Image styling */
+.custom-preview img {
+  max-width: 100%;
+  height: auto;
+  margin: 0.5rem 0;
+  border-radius: 8px;
+}
+
+/* Heading 1 button styling */
+.custom-preview h1 {
+  font-size: 2rem;
+}
+
+/* Heading 2 button styling */
+.custom-preview h2 {
+  font-size: 1.5rem;
+}
+
+/* Miscellaneous styles for lists */
+.custom-preview li {
+  margin: 0.25rem 0;
+}
+
+/* Blockquote styling */
+.custom-preview blockquote {
+  padding-left: 1rem;
+  border-left: 3px solid #ccc;
+  margin: 0.5rem 0;
+  font-style: italic;
+  color: #666;
+}
+
+/* Ordered and unordered lists styling */
+.custom-preview ol, .custom-preview ul {
+  margin-left: 20px;
+  padding-left: 1.5rem;
+  list-style-position: outside;
+}
+
+.custom-preview ol {
+  list-style-type: decimal;
+}
+
+.custom-preview ul {
+  list-style-type: disc;
+}
+
+/* Style for inserted images */
+.custom-preview img {
+  display: block;
+  max-width: 100%;
+  margin: 0.5rem auto;
+  border-radius: 4px;
+}
+
+
+
+/* Alignment handling for text elements in the custom preview */
+.custom-preview .ql-align-center {
+  text-align: center !important;
+}
+
+.custom-preview .ql-align-right {
+  text-align: right !important;
+}
+
+.custom-preview .ql-align-left {
+  text-align: left !important;
+}
+
+.custom-preview .ql-align-justify {
+  text-align: justify !important;
+}
+
+/* Additional styling if needed */
+.custom-preview p {
+  margin: 0.25rem 0;
+  line-height: 1;
+}
+
+/* Other heading, list, and blockquote styles as before */
+
+.custom-preview .ql-indent-1 {
+  margin-left: 30px;
+}
+
+.custom-preview .ql-indent-2 {
+  margin-left: 60px;
+}
+
+.custom-preview .ql-indent-3 {
+  margin-left: 90px;
+}
+
+.custom-preview .ql-indent-4 {
+  margin-left: 120px;
+}
+
+.custom-preview .ql-indent-5 {
+  margin-left: 150px;
+}
+
+/* Extend up to as many levels as necessary */
+.custom-preview .ql-indent-6 {
+  margin-left: 180px;
+}
+
+.custom-preview .ql-indent-7 {
+  margin-left: 210px;
+}
+
+.custom-preview .ql-indent-8 {
+  margin-left: 240px;
+}
+
+
+/* Fonts */
+.custom-preview .ql-font-monospace {
+  font-family: monospace;
+}
+
+.custom-preview .ql-font-serif{
+  font-family: serif;
+}
