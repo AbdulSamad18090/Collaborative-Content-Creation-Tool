@@ -34,6 +34,7 @@ import {
 } from "lucide-react";
 import DialogComponent from "@/components/dialog/page";
 import { useRouter } from "next/navigation";
+import { FileTypeDrawer } from "./_components/drawer/page";
 
 const documents = [
   {
@@ -154,13 +155,17 @@ export default function Documents() {
       <div className="p-4 w-full mx-auto overflow-y-auto">
         <div className="flex justify-between items-center mb-6">
           <h1 className="text-3xl font-bold">Documents</h1>
-          <Button
-            onClick={() => {
-              setIsOpen(true);
-            }}
-          >
-            <Plus className="mr-2 h-4 w-4" /> New Document
-          </Button>
+          <FileTypeDrawer
+            drawerTrigger={
+              <Button
+                onClick={() => {
+                  setIsOpen(true);
+                }}
+              >
+                <Plus className="mr-2 h-4 w-4" /> New Document
+              </Button>
+            }
+          />
         </div>
         <div className="flex justify-between items-center mb-6">
           <div className="relative w-full max-w-sm">
@@ -345,7 +350,7 @@ export default function Documents() {
           </Table>
         </div>
       </div>
-      <DialogComponent isOpen={isOpen} onClose={() => setIsOpen(false)}>
+      {/* <DialogComponent isOpen={isOpen} onClose={() => setIsOpen(false)}>
         <h2 className="text-2xl font-semibold mb-4">Select a Document Type</h2>
         <div className="grid grid-cols-3 gap-4 w-full">
           <button
@@ -382,7 +387,7 @@ export default function Documents() {
             </div>
           </button>
         </div>
-      </DialogComponent>
+      </DialogComponent> */}
     </>
   );
 }
