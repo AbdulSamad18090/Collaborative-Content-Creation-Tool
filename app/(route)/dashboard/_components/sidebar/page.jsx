@@ -19,13 +19,13 @@ const DahsboardSideBar = ({ isSidebarOpen, toggleSidebar, activeTab, setActiveTa
     <aside
       className={`${
         isSidebarOpen ? "translate-x-0" : "-translate-x-full"
-      } fixed inset-y-0 left-0 z-50 w-64 bg-white dark:bg-gray-800 shadow-lg transform transition-transform duration-300 ease-in-out md:relative md:translate-x-0`}
+      } fixed inset-y-0 left-0 z-50 w-64 bg-white dark:bg-black shadow-lg transform transition-transform duration-300 ease-in-out md:relative md:translate-x-0`}
     >
       <div className="flex flex-col h-full">
         {/* Header */}
-        <div className="flex items-center justify-between p-4 border-b dark:border-gray-700">
+        <div className="flex items-center justify-between p-4 border-b dark:border-neutral-800">
           <Link href="/" className="flex items-center space-x-2">
-            <Pen className="h-8 w-6 text-black" />
+            <Pen className="h-8 w-6 text-black dark:text-white" />
             <span className="text-xl font-bold">ContentCollab</span>
           </Link>
           <button onClick={toggleSidebar} className="md:hidden">
@@ -49,8 +49,8 @@ const DahsboardSideBar = ({ isSidebarOpen, toggleSidebar, activeTab, setActiveTa
                   onClick={() => setActiveTab(item.id)}
                   className={`flex items-center space-x-2 w-full p-2 rounded-lg transition-colors duration-200 ${
                     activeTab === item.id
-                      ? "bg-black text-white bg-opacity-90"
-                      : "hover:bg-gray-200 dark:hover:bg-gray-700"
+                      ? "bg-black dark:bg-neutral-700 text-white bg-opacity-90"
+                      : "hover:bg-gray-200 dark:hover:bg-neutral-800"
                   }`}
                 >
                   <item.icon className="h-5 w-5" />
@@ -62,9 +62,9 @@ const DahsboardSideBar = ({ isSidebarOpen, toggleSidebar, activeTab, setActiveTa
         </nav>
 
         {/* Logout button at the bottom */}
-        <div className="p-4 border-t dark:border-gray-700">
+        <div className="p-4 border-t dark:border-neutral-800">
           <button
-            className="flex items-center space-x-2 w-full p-2 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors duration-200"
+            className="flex items-center space-x-2 w-full p-2 rounded-lg hover:bg-gray-200 dark:hover:bg-neutral-800 transition-colors duration-200"
             onClick={() => {
               signOut({
                 callbackUrl: "/",

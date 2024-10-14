@@ -152,7 +152,7 @@ export default function Documents() {
 
   return (
     <>
-      <div className="p-4 w-full mx-auto overflow-y-auto">
+      <div className="p-4 dark:bg-neutral-950 w-full mx-auto overflow-y-auto">
         <div className="flex justify-between items-center mb-6">
           <h1 className="text-3xl font-bold">Documents</h1>
           <FileTypeDrawer
@@ -183,8 +183,8 @@ export default function Documents() {
                 <Filter className="mr-2 h-4 w-4" /> Filter
               </Button>
             </DropdownMenuTrigger>
-            <DropdownMenuContent className="mr-4 bg-white shadow-lg rounded-lg p-2 w-[300px]">
-              <DropdownMenuLabel className="font-bold text-lg text-gray-700">
+            <DropdownMenuContent className="mr-4 bg-white shadow-lg rounded-lg p-2 w-[300px] h-[300px] overflow-y-auto">
+              <DropdownMenuLabel className="font-bold text-lg text-neutral-700">
                 Filter by
               </DropdownMenuLabel>
               <DropdownMenuSeparator />
@@ -266,10 +266,10 @@ export default function Documents() {
             </DropdownMenuContent>
           </DropdownMenu>
         </div>
-        <div className="bg-white mb-5 overflow-auto dark:bg-gray-800 shadow rounded-lg">
+        <div className="bg-white mb-5 overflow-auto dark:bg-neutral-900 shadow rounded-lg">
           <Table>
             <TableHeader>
-              <TableRow>
+              <TableRow className='dark:border-neutral-700'>
                 <TableHead>Title</TableHead>
                 <TableHead>Author</TableHead>
                 <TableHead>Type</TableHead>
@@ -281,7 +281,7 @@ export default function Documents() {
             </TableHeader>
             <TableBody>
               {filteredDocuments.map((doc) => (
-                <TableRow key={doc.id}>
+                <TableRow key={doc.id} className='dark:border-neutral-700'>
                   <TableCell className="font-medium">{doc.title}</TableCell>
                   <TableCell>
                     <div className="flex items-center">
@@ -318,7 +318,7 @@ export default function Documents() {
                   <TableCell>
                     <div className="flex items-center">
                       <Progress value={doc.progress} className="w-full mr-2" />
-                      <span className="text-sm text-gray-500 dark:text-gray-400">
+                      <span className="text-sm text-gray-500 dark:text-neutral-400">
                         {doc.progress}%
                       </span>
                     </div>

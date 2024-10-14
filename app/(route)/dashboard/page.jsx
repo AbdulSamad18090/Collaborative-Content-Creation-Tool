@@ -45,7 +45,7 @@ export default function AdvancedDashboardComponent() {
 
   return (
     session && (
-      <div className="flex h-screen bg-gray-100 dark:bg-gray-900 text-gray-800 dark:text-gray-200 overflow-auto">
+      <div className="flex h-screen bg-gray-100 dark:bg-neutral-950 text-gray-800 dark:text-gray-200 overflow-auto">
         {/* Sidebar */}
         <DahsboardSideBar
           isSidebarOpen={isSidebarOpen}

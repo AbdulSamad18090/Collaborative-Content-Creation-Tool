@@ -1,4 +1,5 @@
 "use client";
+import ModeToggle from "@/components/darkModeToggler/page";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Bell, ChevronDown, Menu, Search } from "lucide-react";
@@ -16,7 +17,7 @@ const DahsboardHeader = ({ toggleSidebar }) => {
   console.log(profileImage);
 
   return (
-    <header className="bg-white dark:bg-gray-800 shadow-sm z-10">
+    <header className="bg-white dark:bg-black shadow-sm z-10">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
           <button onClick={toggleSidebar} className="md:hidden">
@@ -33,17 +34,18 @@ const DahsboardHeader = ({ toggleSidebar }) => {
                 </div>
                 <Input
                   id="search"
-                  className="block w-full pl-10 pr-3 py-2 border border-gray-300 rounded-md leading-5 bg-white dark:bg-gray-700 placeholder-gray-500 focus:outline-none focus:placeholder-gray-400 focus:ring-1 focus:ring-gray-500 focus:border-gray-500 sm:text-sm dark:border-neutral-800"
+                  className="block w-full pl-10 pr-3 py-2 border border-gray-300 rounded-md leading-5 bg-white dark:bg-black placeholder-gray-500 focus:outline-none focus:placeholder-gray-400 focus:ring-1 focus:ring-gray-500 focus:border-gray-500 sm:text-sm dark:border-neutral-800"
                   placeholder="Search documents, tasks, team members..."
                   type="search"
                 />
               </div>
             </div>
           </div>
+          <ModeToggle/>
           <div className="flex items-center">
-            <button className="flex-shrink-0 p-1 rounded-full hover:bg-gray-100 dark:hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-black relative">
+            <button className="flex-shrink-0 p-1 rounded-full hover:bg-gray-100 dark:hover:bg-neutral-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-black relative">
               <Bell className="h-6 w-6" />
-              <span className="absolute top-0 right-0 block h-2 w-2 rounded-full bg-red-400 ring-2 ring-white dark:ring-gray-800" />
+              <span className="absolute top-0 right-0 block h-2 w-2 rounded-full bg-red-400 ring-2 ring-white dark:ring-neutral-800" />
             </button>
             <div className="ml-3 relative">
               <div>

@@ -127,7 +127,7 @@ const MainDashboard = () => {
   };
 
   return (
-    <main className="flex-1 overflow-y-auto bg-gray-100 dark:bg-gray-900 p-4">
+    <main className="flex-1 overflow-y-auto bg-gray-100 dark:bg-neutral-950 p-4">
       <div className="max-w-7xl mx-auto">
         <div className="flex items-center justify-between gap-4 mb-6">
           <h1 className="text-3xl font-semibold">Dashboard</h1>
@@ -186,10 +186,10 @@ const MainDashboard = () => {
           ].map((stat, index) => (
             <div
               key={index}
-              className="bg-white dark:bg-gray-800 rounded-lg shadow p-6 flex items-center"
+              className="bg-white dark:bg-neutral-900 rounded-lg shadow p-6 flex items-center"
             >
               <div className="flex-1">
-                <h2 className="text-sm font-medium text-gray-500 dark:text-gray-400 mb-1">
+                <h2 className="text-sm font-medium text-gray-500 dark:text-neutral-500 mb-1">
                   {stat.label}
                 </h2>
                 <p className="text-2xl font-bold">{stat.value}</p>
@@ -216,7 +216,7 @@ const MainDashboard = () => {
         {/* Charts Section */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-2 mb-6">
           {/* Activity Chart */}
-          <div className="bg-white dark:bg-gray-800 rounded-lg shadow p-6">
+          <div className="bg-white dark:bg-neutral-900 rounded-lg shadow p-6">
             <h2 className="text-lg font-semibold mb-4">Weekly Activity</h2>
             <div className="h-80">
               <ResponsiveContainer width="100%" height="100%">
@@ -238,7 +238,7 @@ const MainDashboard = () => {
           </div>
 
           {/* Content Distribution Chart */}
-          <div className="bg-white dark:bg-gray-800 rounded-lg shadow p-6">
+          <div className="bg-white dark:bg-neutral-900 rounded-lg shadow p-6">
             <h2 className="text-lg font-semibold mb-4">Content Distribution</h2>
             <div className="h-80">
               <ResponsiveContainer width="100%" height="100%">
@@ -280,7 +280,7 @@ const MainDashboard = () => {
         </div>
 
         {/* Recent Documents */}
-        <div className="bg-white dark:bg-gray-800 rounded-lg shadow overflow-hidden mb-6">
+        <div className="bg-white dark:bg-neutral-900 rounded-lg shadow overflow-hidden mb-6">
           <div className="p-6">
             <h2 className="text-lg font-semibold mb-4">Recent Documents</h2>
             <DragDropContext onDragEnd={onDragEnd}>
@@ -289,7 +289,7 @@ const MainDashboard = () => {
                   <ul
                     {...provided.droppableProps}
                     ref={provided.innerRef}
-                    className="divide-y divide-gray-200 dark:divide-gray-700"
+                    className="divide-y divide-gray-200 dark:divide-neutral-800"
                   >
                     {documents.map((doc, index) => (
                       <Draggable
@@ -302,7 +302,7 @@ const MainDashboard = () => {
                             ref={provided.innerRef}
                             {...provided.draggableProps}
                             {...provided.dragHandleProps}
-                            className="py-4 flex items-center justify-between hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors duration-150 ease-in-out"
+                            className="py-4 flex items-center justify-between hover:bg-gray-50 dark:hover:bg-neutral-800 transition-colors duration-150 ease-in-out"
                           >
                             <div className="flex items-center">
                               <FileText className="h-6 w-6 text-gray-400 mr-3" />
@@ -310,7 +310,7 @@ const MainDashboard = () => {
                                 <p className="text-sm font-medium">
                                   {doc.title}
                                 </p>
-                                <p className="text-xs text-gray-500 dark:text-gray-400">
+                                <p className="text-xs text-gray-500 dark:text-neutral-400">
                                   {doc.author} • {doc.date}
                                 </p>
                               </div>
@@ -332,10 +332,10 @@ const MainDashboard = () => {
                                 value={doc.progress}
                                 className="w-24 h-2 mr-2"
                               />
-                              <span className="text-sm text-gray-500 dark:text-gray-400 mr-2">
+                              <span className="text-sm text-gray-500 dark:text-neutral-400 mr-2">
                                 {doc.progress}%
                               </span>
-                              <button className="text-gray-400 hover:text-gray-600 dark:hover:text-gray-200">
+                              <button className="text-gray-400 hover:text-gray-600 dark:hover:text-neutral-300">
                                 <MoreVertical className="h-5 w-5" />
                               </button>
                             </div>
@@ -349,7 +349,7 @@ const MainDashboard = () => {
               </Droppable>
             </DragDropContext>
           </div>
-          <div className="bg-gray-50 dark:bg-gray-700 px-6 py-3">
+          <div className="bg-gray-50 dark:bg-neutral-900 px-6 py-3">
             <FileTypeDrawer
               drawerTrigger={
                 <Button className="w-full flex items-center justify-center">
@@ -362,14 +362,14 @@ const MainDashboard = () => {
         </div>
 
         {/* Team Members */}
-        <div className="bg-white dark:bg-gray-800 rounded-lg shadow overflow-hidden">
+        <div className="bg-white dark:bg-neutral-900 rounded-lg shadow overflow-hidden">
           <div className="p-6">
             <h2 className="text-lg font-semibold mb-4">Team Members</h2>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
               {teamMembers.map((member) => (
                 <div
                   key={member.id}
-                  className="flex items-center space-x-4 p-4 bg-gray-50 dark:bg-gray-700 rounded-lg"
+                  className="flex items-center space-x-4 p-4 bg-gray-50 dark:bg-neutral-800 rounded-lg"
                 >
                   <Avatar>
                     <AvatarImage src={member.avatar} alt={member.name} />
@@ -382,7 +382,7 @@ const MainDashboard = () => {
                   </Avatar>
                   <div>
                     <p className="font-medium">{member.name}</p>
-                    <p className="text-sm text-gray-500 dark:text-gray-400">
+                    <p className="text-sm text-gray-500 dark:text-neutral-400">
                       {member.role}
                     </p>
                   </div>

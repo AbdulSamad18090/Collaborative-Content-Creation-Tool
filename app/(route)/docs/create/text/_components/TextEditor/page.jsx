@@ -7,12 +7,15 @@ import React, { useState, useEffect } from "react";
 import "react-quill/dist/quill.snow.css";
 import htmlDocx from "html-docx-js/dist/html-docx";
 import { saveAs } from "file-saver";
+import ModeToggle from "@/components/darkModeToggler/page";
 
 // Dynamically import ReactQuill so it only loads in the browser
 const ReactQuill = dynamic(() => import("react-quill"), { ssr: false });
 
 const isMobileDevice = () => {
-  return typeof window !== "undefined" && /Mobi|Android/i.test(navigator.userAgent);
+  return (
+    typeof window !== "undefined" && /Mobi|Android/i.test(navigator.userAgent)
+  );
 };
 
 const RichTextEditor = () => {
@@ -89,9 +92,9 @@ const RichTextEditor = () => {
 
   return (
     <>
-      <div className="flex items-center justify-between flex-wrap gap-2 p-3 border-b">
+      <div className="flex items-center justify-between flex-wrap gap-2 p-3 border-b dark:border-neutral-800">
         <Link href="/dashboard" className="flex items-center space-x-2">
-          <Pen className="h-8 w-6 text-black" />
+          <Pen className="h-8 w-6 text-black dark:text-white" />
           <span className="text-xl font-bold">ContentCollab</span>
         </Link>
         <div className="flex items-center gap-2 flex-wrap">
@@ -107,9 +110,10 @@ const RichTextEditor = () => {
           </Button>
 
           <Button variant="outline" onClick={exportAsDocx}>
-            <Download className="h-4 w-4 mr-2" />
+            <Download className="h-4 w-4 mr-2 " />
             Export
           </Button>
+          <ModeToggle />
         </div>
       </div>
       <div className="px-4 py-2">
@@ -133,11 +137,11 @@ const RichTextEditor = () => {
 
       {/* Right Sidebar for Preview */}
       <div
-        className={`fixed top-0 right-0 overflow-y-auto md:w-1/2 w-full h-full bg-gray-50 border-l shadow-lg p-4 z-50 transform transition-transform duration-300 ease-in-out ${
+        className={`fixed top-0 right-0 overflow-y-auto md:w-1/2 w-full h-full bg-gray-50 dark:bg-neutral-900 border-l dark:border-neutral-800 shadow-lg p-4 z-50 transform transition-transform duration-300 ease-in-out ${
           isPreviewOpen ? "translate-x-0" : "translate-x-full"
         }`}
       >
-        <div className="flex justify-between items-center mb-4 border-b border-gray-300 pb-4">
+        <div className="flex justify-between items-center mb-4 border-b border-gray-300 dark:border-neutral-800 pb-4">
           <h2 className="text-xl font-semibold">Document Preview</h2>
           <div className="flex items-center gap-2">
             <Button variant="outline" onClick={() => {}}>

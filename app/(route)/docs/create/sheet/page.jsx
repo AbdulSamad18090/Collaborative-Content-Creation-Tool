@@ -1,5 +1,6 @@
 "use client";
 
+import ModeToggle from "@/components/darkModeToggler/page";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Download, Pen, Save } from "lucide-react";
@@ -58,7 +59,7 @@ const SpreadsheetEditor = () => {
     <>
       <div className="flex items-center justify-between flex-wrap gap-2 p-3 border-b">
         <Link href="/dashboard" className="flex items-center space-x-2">
-          <Pen className="h-8 w-6 text-black" />
+          <Pen className="h-8 w-6 text-black dark:text-white" />
           <span className="text-xl font-bold">ContentCollab</span>
         </Link>
         <div className="flex items-center gap-2 flex-wrap">
@@ -75,6 +76,7 @@ const SpreadsheetEditor = () => {
             <Download className="h-4 w-4 mr-2" />
             Export
           </Button>
+          <ModeToggle/>
         </div>
       </div>
       <div className="space-x-2 m-3 flex">

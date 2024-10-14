@@ -85,7 +85,7 @@ export default function Collaborators() {
   return (
     (<div className="p-4 w-full mx-auto overflow-y-auto">
       <h1 className="text-3xl font-bold mb-6">Collaborators</h1>
-      <Card className="mb-8">
+      <Card className="mb-8 dark:bg-neutral-900 dark:bg-opacity-60">
         <CardHeader>
           <CardTitle>Invite Collaborators</CardTitle>
           <CardDescription>Add new team members to your project</CardDescription>
@@ -124,7 +124,7 @@ export default function Collaborators() {
           </Button>
         </CardFooter>
       </Card>
-      <Card>
+      <Card className='dark:bg-neutral-900 dark:bg-opacity-60'>
         <CardHeader>
           <CardTitle>Current Collaborators</CardTitle>
           <CardDescription>Manage your team members and their access levels</CardDescription>
@@ -132,7 +132,7 @@ export default function Collaborators() {
         <CardContent>
           <Table>
             <TableHeader>
-              <TableRow>
+              <TableRow className='dark:border-neutral-700'>
                 <TableHead>Name</TableHead>
                 <TableHead>Email</TableHead>
                 <TableHead>Access</TableHead>
@@ -141,7 +141,7 @@ export default function Collaborators() {
             </TableHeader>
             <TableBody>
               {collaborators.map((collaborator) => (
-                <TableRow key={collaborator.id}>
+                <TableRow key={collaborator.id} className='dark:border-neutral-700'>
                   <TableCell className="font-medium">
                     <div className="flex items-center space-x-3">
                       <Avatar>
