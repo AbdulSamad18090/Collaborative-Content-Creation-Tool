@@ -59,15 +59,13 @@ const PDFGenerator = () => {
 
   const generatePDF = () => {
     if (typeof window === "undefined") {
-      // Ensure this code only runs in the browser
+      // Ensure this code only runs in the browser, avoiding SSR
       return;
     }
   
-    // Create a container to render the HTML for pdf generation
     const tempElement = document.createElement("div");
     tempElement.innerHTML = editorHtml;
   
-    // Apply custom CSS for bullet points and images
     const style = document.createElement("style");
     style.innerHTML = `
       ul, ol {
@@ -93,14 +91,6 @@ const PDFGenerator = () => {
         border-radius: 5px;
       }
   
-      .ql-font-monospace {
-        font-family: monospace;
-      }
-  
-      .ql-font-serif {
-        font-family: serif;
-      }
-  
       .ql-align-center {
         text-align: center !important;
       }
@@ -113,45 +103,9 @@ const PDFGenerator = () => {
         text-align: left !important;
       }
   
-      .ql-align-justify {
-        text-align: justify !important;
-      }
-  
       p {
         margin: 0.25rem 0;
         line-height: 1;
-      }
-  
-      .ql-indent-1 {
-         margin-left: 30px;
-      }
-  
-      .ql-indent-2 {
-        margin-left: 60px;
-      }
-  
-      .ql-indent-3 {
-        margin-left: 90px;
-      }
-  
-      .ql-indent-4 {
-        margin-left: 120px;
-      }
-  
-      .ql-indent-5 {
-        margin-left: 150px;
-      }
-  
-      .ql-indent-6 {
-        margin-left: 180px;
-      }
-  
-      .ql-indent-7 {
-        margin-left: 210px;
-      }
-  
-      .ql-indent-8 {
-        margin-left: 240px;
       }
   
       code {
@@ -161,7 +115,6 @@ const PDFGenerator = () => {
         padding: 2px 4px;
         font-family: "Courier New", Courier, monospace;
         font-size: 0.875rem;
-        display: inline;
       }
   
       pre {
@@ -179,7 +132,6 @@ const PDFGenerator = () => {
     `;
     tempElement.appendChild(style);
   
-    // Set the options for html2pdf
     const options = {
       margin: 0.5,
       filename: `${fileName}.pdf`,
@@ -188,9 +140,9 @@ const PDFGenerator = () => {
       jsPDF: { unit: "in", format: "a4", orientation: "portrait" },
     };
   
-    // Convert the HTML to PDF
     html2pdf().from(tempElement).set(options).save();
   };
+  
   
 
   return (
