@@ -1,9 +1,12 @@
-"use client"
+"use client";
 import React, { useState, useEffect } from "react";
 import "react-quill/dist/quill.snow.css"; // Import styles
-import { jsPDF } from "jspdf";
-import html2canvas from "html2canvas";
 import dynamic from "next/dynamic";
+import Link from "next/link";
+import { Download, Pen, Save } from "lucide-react";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
+import html2pdf from "html2pdf.js";
 
 // Dynamically import ReactQuill so it only loads in the browser
 const ReactQuill = dynamic(() => import("react-quill"), { ssr: false });
@@ -11,6 +14,8 @@ const ReactQuill = dynamic(() => import("react-quill"), { ssr: false });
 const PDFGenerator = () => {
   const [editorHtml, setEditorHtml] = useState("");
   const [isClient, setIsClient] = useState(false);
+  const [fileName, setFileName] = useState("Document");
+  console.log("Content ===>", editorHtml);
 
   // Ensure this code runs only on the client side
   useEffect(() => {
@@ -52,77 +57,181 @@ const PDFGenerator = () => {
     setEditorHtml(html);
   };
 
-  const generatePDF = async () => {
-    // Create a temporary element to render the HTML
+  const generatePDF = () => {
+    // Create a container to render the HTML for pdf generation
     const tempElement = document.createElement("div");
     tempElement.innerHTML = editorHtml;
 
-    // Set styles to match Quill editor
-    tempElement.style.padding = "20px";
-    tempElement.style.fontFamily = "Arial, sans-serif"; // Adjust this if necessary
-    tempElement.style.lineHeight = "1.5";
-
-    // Append the temporary element to the body for rendering
-    document.body.appendChild(tempElement);
-
-    // Create a new jsPDF instance
-    const doc = new jsPDF({
-      orientation: "portrait",
-      unit: "mm",
-      format: "a4",
-      putOnlyUsedFonts: true,
-      floatPrecision: 16,
-    });
-
-    try {
-      // Use html2canvas to capture the temporary element
-      const canvas = await html2canvas(tempElement, { scale: 2 }); // Increase scale for better quality
-      const imgData = canvas.toDataURL("image/png");
-
-      // Calculate PDF dimensions based on canvas size
-      const imgWidth = 210; // A4 width in mm
-      const pageHeight = doc.internal.pageSize.height;
-      const imgHeight = (canvas.height * imgWidth) / canvas.width;
-      let heightLeft = imgHeight;
-
-      let position = 0;
-
-      // Add the image to the PDF
-      doc.addImage(imgData, "PNG", 0, position, imgWidth, imgHeight);
-      heightLeft -= pageHeight;
-
-      // Add more pages if the content is longer than one page
-      while (heightLeft >= 0) {
-        position = heightLeft;
-        doc.addPage();
-        doc.addImage(imgData, "PNG", 0, position, imgWidth, imgHeight);
-        heightLeft -= pageHeight;
+    // Apply custom CSS for bullet points and images
+    const style = document.createElement("style");
+    style.innerHTML = `
+      /* Ensure bullet points and ordered lists display correctly */
+      ul, ol {
+        padding-left: 20px;
+        margin-bottom: 10px;
+      }
+      ul li, ol li {
+        margin-bottom: 5px;
       }
 
-      // Save the generated PDF
-      doc.save("document.pdf");
-    } catch (error) {
-      console.error("Error generating PDF: ", error);
-    } finally {
-      // Clean up the temporary element
-      document.body.removeChild(tempElement);
-    }
+      ul {
+        list-style-type: disc;
+      }
+
+      ol {
+        list-style-type: decimal;
+      }
+
+      /* Add vertical spacing around images to prevent overlap */
+      img {
+        margin-top: 10px;
+        display: block;
+        max-width: 100%;
+        border-radius: 5px;
+      }
+
+      .ql-font-monospace {
+        font-family: monospace;
+      }
+
+      .ql-font-serif{
+        font-family: serif;
+      }
+
+      /* Alignment handling for text elements in the custom preview */
+      .ql-align-center {
+        text-align: center !important;
+      }
+
+      .ql-align-right {
+        text-align: right !important;
+      }
+
+      .ql-align-left {
+        text-align: left !important;
+      }
+
+      .ql-align-justify {
+        text-align: justify !important;
+      }
+
+      /* Additional styling if needed */
+      p {
+        margin: 0.25rem 0;
+        line-height: 1;
+      }
+
+      /* Other heading, list, and blockquote styles as before */
+
+      .ql-indent-1 {
+         margin-left: 30px;
+      }
+
+      .ql-indent-2 {
+        margin-left: 60px;
+      }
+
+      .ql-indent-3 {
+        margin-left: 90px;
+      }
+
+      .ql-indent-4 {
+        margin-left: 120px;
+      }
+
+      .ql-indent-5 {
+        margin-left: 150px;
+      }
+
+      /* Extend up to as many levels as necessary */
+      .ql-indent-6 {
+        margin-left: 180px;
+      }
+
+      .ql-indent-7 {
+        margin-left: 210px;
+      }
+
+      .ql-indent-8 {
+        margin-left: 240px;
+      }
+
+      code {
+        background-color: #f5f5f5;
+        color: #d63384; /* Customize color if needed */
+        border-radius: 4px;
+        padding: 2px 4px;
+        font-family: "Courier New", Courier, monospace;
+        font-size: 0.875rem;
+        display: inline;
+      }
+
+      pre {
+        background-color: rgb(4, 4, 46); /* Dark background for code blocks */
+        color: rgb(0, 255, 157);
+        padding: 1rem;
+        border-radius: 8px;
+        overflow-x: auto; /* Ensures long code lines are scrollable horizontally */
+        font-family: "Courier New", Courier, monospace;
+        font-size: 0.875rem;
+        line-height: 1.5;
+        margin: 1rem 0; /* Spacing around code blocks */
+        white-space: pre-wrap; /* Ensures code preserves formatting */
+      }
+    `;
+    tempElement.appendChild(style);
+
+    // Set the options for html2pdf
+    const options = {
+      margin: 0.5,
+      filename: `${fileName}.pdf`,
+      image: { type: "jpeg", quality: 0.98 },
+      html2canvas: { scale: 2 },
+      jsPDF: { unit: "in", format: "a4", orientation: "portrait" },
+    };
+
+    // Convert the HTML to PDF
+    html2pdf().from(tempElement).set(options).save();
   };
 
   return (
-    <div>
-      {isClient && (
-        <ReactQuill
-          theme="snow"
-          value={editorHtml}
-          onChange={handleChange}
-          modules={modules}
-          formats={formats}
-          placeholder="Compose something awesome..."
-        />
-      )}
-      <button onClick={generatePDF}>Generate PDF</button>
-    </div>
+    <>
+      <div className="flex items-center justify-between flex-wrap gap-2 p-3 border-b">
+        <Link href="/dashboard" className="flex items-center space-x-2">
+          <Pen className="h-8 w-6 text-black" />
+          <span className="text-xl font-bold">ContentCollab</span>
+        </Link>
+        <div className="flex items-center gap-2 flex-wrap">
+          <Input
+            placeholder="Enter File name"
+            value={fileName}
+            onChange={(e) => setFileName(e.target.value)}
+            className="sm:w-[200px] w-full"
+          />
+          <Button onClick={() => {}}>
+            <Save className="h-4 w-4 mr-2" />
+            Save
+          </Button>
+
+          <Button variant="outline" onClick={generatePDF}>
+            <Download className="h-4 w-4 mr-2" />
+            Export
+          </Button>
+        </div>
+      </div>
+      <div>
+        {isClient && (
+          <ReactQuill
+            theme="snow"
+            value={editorHtml}
+            onChange={handleChange}
+            modules={modules}
+            formats={formats}
+            placeholder="Compose something awesome..."
+          />
+        )}
+      </div>
+    </>
   );
 };
 

@@ -118,7 +118,7 @@ const RichTextEditor = () => {
           <span>Preview</span>
         </Button>
       </div>
-      <div className="px-4">
+      <div className="">
         {isClient && (
           <ReactQuill
             theme="snow"
