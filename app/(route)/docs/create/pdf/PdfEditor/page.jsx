@@ -58,14 +58,18 @@ const PDFGenerator = () => {
   };
 
   const generatePDF = () => {
+    if (typeof window === "undefined") {
+      // Ensure this code only runs in the browser
+      return;
+    }
+  
     // Create a container to render the HTML for pdf generation
     const tempElement = document.createElement("div");
     tempElement.innerHTML = editorHtml;
-
+  
     // Apply custom CSS for bullet points and images
     const style = document.createElement("style");
     style.innerHTML = `
-      /* Ensure bullet points and ordered lists display correctly */
       ul, ol {
         padding-left: 20px;
         margin-bottom: 10px;
@@ -73,114 +77,108 @@ const PDFGenerator = () => {
       ul li, ol li {
         margin-bottom: 5px;
       }
-
+  
       ul {
         list-style-type: disc;
       }
-
+  
       ol {
         list-style-type: decimal;
       }
-
-      /* Add vertical spacing around images to prevent overlap */
+  
       img {
         margin-top: 10px;
         display: block;
         max-width: 100%;
         border-radius: 5px;
       }
-
+  
       .ql-font-monospace {
         font-family: monospace;
       }
-
-      .ql-font-serif{
+  
+      .ql-font-serif {
         font-family: serif;
       }
-
-      /* Alignment handling for text elements in the custom preview */
+  
       .ql-align-center {
         text-align: center !important;
       }
-
+  
       .ql-align-right {
         text-align: right !important;
       }
-
+  
       .ql-align-left {
         text-align: left !important;
       }
-
+  
       .ql-align-justify {
         text-align: justify !important;
       }
-
-      /* Additional styling if needed */
+  
       p {
         margin: 0.25rem 0;
         line-height: 1;
       }
-
-      /* Other heading, list, and blockquote styles as before */
-
+  
       .ql-indent-1 {
          margin-left: 30px;
       }
-
+  
       .ql-indent-2 {
         margin-left: 60px;
       }
-
+  
       .ql-indent-3 {
         margin-left: 90px;
       }
-
+  
       .ql-indent-4 {
         margin-left: 120px;
       }
-
+  
       .ql-indent-5 {
         margin-left: 150px;
       }
-
-      /* Extend up to as many levels as necessary */
+  
       .ql-indent-6 {
         margin-left: 180px;
       }
-
+  
       .ql-indent-7 {
         margin-left: 210px;
       }
-
+  
       .ql-indent-8 {
         margin-left: 240px;
       }
-
+  
       code {
         background-color: #f5f5f5;
-        color: #d63384; /* Customize color if needed */
+        color: #d63384;
         border-radius: 4px;
         padding: 2px 4px;
         font-family: "Courier New", Courier, monospace;
         font-size: 0.875rem;
         display: inline;
       }
-
+  
       pre {
-        background-color: rgb(4, 4, 46); /* Dark background for code blocks */
+        background-color: rgb(4, 4, 46);
         color: rgb(0, 255, 157);
         padding: 1rem;
         border-radius: 8px;
-        overflow-x: auto; /* Ensures long code lines are scrollable horizontally */
+        overflow-x: auto;
         font-family: "Courier New", Courier, monospace;
         font-size: 0.875rem;
         line-height: 1.5;
-        margin: 1rem 0; /* Spacing around code blocks */
-        white-space: pre-wrap; /* Ensures code preserves formatting */
+        margin: 1rem 0;
+        white-space: pre-wrap;
       }
     `;
     tempElement.appendChild(style);
-
+  
     // Set the options for html2pdf
     const options = {
       margin: 0.5,
@@ -189,10 +187,11 @@ const PDFGenerator = () => {
       html2canvas: { scale: 2 },
       jsPDF: { unit: "in", format: "a4", orientation: "portrait" },
     };
-
+  
     // Convert the HTML to PDF
     html2pdf().from(tempElement).set(options).save();
   };
+  
 
   return (
     <>
