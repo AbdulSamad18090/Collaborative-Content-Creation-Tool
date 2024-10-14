@@ -34,6 +34,7 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
+import { FileTypeDrawer } from "../documents/_components/drawer/page";
 
 const activityData = [
   { name: "Mon", documents: 4, collaborators: 3, comments: 7 },
@@ -349,10 +350,14 @@ const MainDashboard = () => {
             </DragDropContext>
           </div>
           <div className="bg-gray-50 dark:bg-gray-700 px-6 py-3">
-            <Button className="w-full flex items-center justify-center">
-              <Plus className="h-5 w-5 mr-2" />
-              Create New Document
-            </Button>
+            <FileTypeDrawer
+              drawerTrigger={
+                <Button className="w-full flex items-center justify-center">
+                  <Plus className="h-5 w-5 mr-2" />
+                  Create New Document
+                </Button>
+              }
+            />
           </div>
         </div>
 
