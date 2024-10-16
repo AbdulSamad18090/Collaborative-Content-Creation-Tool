@@ -2,6 +2,8 @@ import localFont from "next/font/local";
 import "./globals.css";
 import SessionWrapper from "@/components/SessionWrapper/page";
 import { ThemeProvider } from "@/components/themeProvider/page";
+import { StoreProvider } from "@/components/storeProvider/page";
+import { Toaster } from "@/components/ui/toaster";
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -32,7 +34,8 @@ export default function RootLayout({ children }) {
             enableSystem
             disableTransitionOnChange
           >
-            {children}
+            <StoreProvider>{children}</StoreProvider>
+            <Toaster />
           </ThemeProvider>
         </body>
       </SessionWrapper>

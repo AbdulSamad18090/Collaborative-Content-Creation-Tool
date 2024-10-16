@@ -1,6 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Download, Eye, Pen, Save, X } from "lucide-react";
+import { Download, Eye, LoaderPinwheel, Pen, Save, X } from "lucide-react";
 import dynamic from "next/dynamic";
 import Link from "next/link";
 import React, { useState, useEffect } from "react";
@@ -8,6 +8,11 @@ import "react-quill/dist/quill.snow.css";
 import htmlDocx from "html-docx-js/dist/html-docx";
 import { saveAs } from "file-saver";
 import ModeToggle from "@/components/darkModeToggler/page";
+import { useDispatch } from "react-redux";
+import { saveDocument } from "@/lib/slices/documentSlice";
+import { useSelector } from "react-redux";
+import { useSession } from "next-auth/react";
+import { useToast } from "@/hooks/use-toast";
 
 // Dynamically import ReactQuill so it only loads in the browser
 const ReactQuill = dynamic(() => import("react-quill"), { ssr: false });
@@ -23,11 +28,40 @@ const RichTextEditor = () => {
   const [isClient, setIsClient] = useState(false);
   const [isPreviewOpen, setIsPreviewOpen] = useState(false); // State to control sidebar visibility
   const [fileName, setFileName] = useState("Document"); // State for the file name
+  const dispatch = useDispatch();
+  const { loading, error, savedDocument } = useSelector(
+    (state) => state.documentSlice
+  );
+  const { data: session } = useSession();
+  const id = session?.user?.id;
+  const { toast } = useToast();
 
   // Ensure this code runs only on the client side
   useEffect(() => {
     setIsClient(true);
   }, []);
+
+  useEffect(() => {
+    if (error) {
+      toast({
+        title: "ERROR",
+        description: error?.error,
+      });
+    } else if (!loading && savedDocument) {
+      toast({
+        title: "Saved",
+        description: "Document saved successfully",
+      });
+    }
+  }, [error, document, loading]);
+
+  console.log("Saved Document =>", savedDocument);
+
+  const handleSave = () => {
+    dispatch(
+      saveDocument({ fileName, type: "text", content: value, createdBy: id })
+    );
+  };
 
   const modules = {
     toolbar: [
@@ -104,9 +138,14 @@ const RichTextEditor = () => {
             onChange={(e) => setFileName(e.target.value)}
             className="sm:w-[200px] w-full"
           />
-          <Button onClick={() => {}}>
-            <Save className="h-4 w-4 mr-2" />
-            Save
+          <Button onClick={handleSave}>
+            {loading && <LoaderPinwheel className="animate-spin" />}
+            {!loading && (
+              <>
+                <Save className="h-4 w-4 mr-2" />
+                save
+              </>
+            )}
           </Button>
 
           <Button variant="outline" onClick={exportAsDocx}>
@@ -144,9 +183,14 @@ const RichTextEditor = () => {
         <div className="flex justify-between items-center mb-4 border-b border-gray-300 dark:border-neutral-800 pb-4">
           <h2 className="text-xl font-semibold">Document Preview</h2>
           <div className="flex items-center gap-2">
-            <Button variant="outline" onClick={() => {}}>
-              <Save className="h-4 w-4 mr-2" />
-              Save
+            <Button variant="outline" onClick={handleSave}>
+              {loading && <LoaderPinwheel className="animate-spin" />}
+              {!loading && (
+                <>
+                  <Save className="h-4 w-4 mr-2" />
+                  save
+                </>
+              )}
             </Button>
             <Button onClick={exportAsDocx}>
               <Download className="h-4 w-4 mr-2" />
