@@ -44,8 +44,8 @@ const RichTextEditor = () => {
   useEffect(() => {
     if (error) {
       toast({
-        title: "ERROR",
-        description: error?.error,
+        title: "Something wents wrong!",
+        description: "There is a Problem occured during document saving.",
       });
     } else if (!loading && savedDocument) {
       toast({
