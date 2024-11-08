@@ -3,7 +3,7 @@ import { Input } from "@/components/ui/input";
 import { Download, Eye, LoaderPinwheel, Pen, Save, X } from "lucide-react";
 import dynamic from "next/dynamic";
 import Link from "next/link";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import "react-quill/dist/quill.snow.css";
 import htmlDocx from "html-docx-js/dist/html-docx";
 import { saveAs } from "file-saver";
@@ -13,15 +13,11 @@ import { saveDocument } from "@/lib/slices/documentSlice";
 import { useSelector } from "react-redux";
 import { useSession } from "next-auth/react";
 import { useToast } from "@/hooks/use-toast";
+import { database } from "@/firebase.config"; // Import Firebase database
+import { ref, onValue, set, update } from "firebase/database"; // Firebase functions
 
 // Dynamically import ReactQuill so it only loads in the browser
 const ReactQuill = dynamic(() => import("react-quill"), { ssr: false });
-
-const isMobileDevice = () => {
-  return (
-    typeof window !== "undefined" && /Mobi|Android/i.test(navigator.userAgent)
-  );
-};
 
 const RichTextEditor = () => {
   const [value, setValue] = useState("");
@@ -41,22 +37,30 @@ const RichTextEditor = () => {
     setIsClient(true);
   }, []);
 
+  // Firebase document reference
+  const docRef = ref(database, `documents/documentId1`); // Assuming documentId1 is the unique document ID
+
+  // Listen for changes in Firebase document content
   useEffect(() => {
-    if (error) {
-      toast({
-        title: "Something wents wrong!",
-        description: "There is a Problem occured during document saving.",
-      });
-    } else if (!loading && savedDocument) {
-      toast({
-        title: "Saved",
-        description: "Document saved successfully",
-      });
-    }
-  }, [error, document, loading]);
+    const unsubscribe = onValue(docRef, (snapshot) => {
+      const data = snapshot.val();
+      if (data) {
+        setValue(data.content); // Update editor value with content from Firebase
+      }
+    });
 
-  console.log("Saved Document =>", savedDocument);
+    return () => {
+      unsubscribe();
+    };
+  }, [docRef]);
 
+  // Sync content to Firebase on change
+  const handleChange = (newValue) => {
+    setValue(newValue);
+    update(docRef, { content: newValue }); // Sync to Firebase in real-time
+  };
+
+  // Function to handle save
   const handleSave = () => {
     dispatch(
       saveDocument({ fileName, type: "text", content: value, createdBy: id })
@@ -103,26 +107,8 @@ const RichTextEditor = () => {
   const exportAsDocx = () => {
     const htmlContent = value;
     const converted = htmlDocx.asBlob(htmlContent);
-
-    // Check if the device is mobile and handle download accordingly
-    if (isMobileDevice()) {
-      const url = URL.createObjectURL(converted);
-      const link = document.createElement("a");
-      link.href = url;
-      link.download = `${fileName}.docx`;
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
-      URL.revokeObjectURL(url);
-    } else {
-      // For desktop or non-mobile browsers
-      saveAs(converted, `${fileName}.docx`);
-    }
+    saveAs(converted, `${fileName}.docx`);
   };
-
-  useEffect(() => {
-    console.log("Value ==>", value);
-  }, [value]);
 
   return (
     <>
@@ -166,7 +152,7 @@ const RichTextEditor = () => {
           <ReactQuill
             theme="snow"
             value={value}
-            onChange={setValue}
+            onChange={handleChange} // Handle change in editor
             modules={modules}
             formats={formats}
             placeholder="Compose something awesome..."
