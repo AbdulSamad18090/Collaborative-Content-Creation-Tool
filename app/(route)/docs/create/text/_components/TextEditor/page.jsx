@@ -3,107 +3,117 @@ import { Input } from "@/components/ui/input";
 import { Download, Eye, LoaderPinwheel, Pen, Save, X } from "lucide-react";
 import dynamic from "next/dynamic";
 import Link from "next/link";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef, useCallback } from "react";
 import "react-quill/dist/quill.snow.css";
 import htmlDocx from "html-docx-js/dist/html-docx";
 import { saveAs } from "file-saver";
 import ModeToggle from "@/components/darkModeToggler/page";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { saveDocument } from "@/lib/slices/documentSlice";
-import { useSelector } from "react-redux";
 import { useSession } from "next-auth/react";
 import { useToast } from "@/hooks/use-toast";
-import { database } from "@/firebase.config"; // Import Firebase database
-import { ref, set, update, onValue } from "firebase/database"; // Firebase functions
-import debounce from "lodash/debounce"; // To debounce updates to Firebase
+import { database } from "@/firebase.config";
+import { ref, set, update, onValue } from "firebase/database";
+import debounce from "lodash/debounce";
+import { usePathname, useRouter } from "next/navigation";
 
-// Dynamically import ReactQuill so it only loads in the browser
 const ReactQuill = dynamic(() => import("react-quill"), { ssr: false });
 
 const RichTextEditor = () => {
   const [value, setValue] = useState("");
   const [isClient, setIsClient] = useState(false);
   const [isPreviewOpen, setIsPreviewOpen] = useState(false);
-  const [fileName, setFileName] = useState(""); // State for the file name
-  const [isSaving, setIsSaving] = useState(false); // Track if saving is in progress
+  const [fileName, setFileName] = useState("");
+  const [isSaving, setIsSaving] = useState(false);
   const dispatch = useDispatch();
-  const { loading, error, savedDocument } = useSelector((state) => state.documentSlice);
   const { data: session } = useSession();
-  const id = session?.user?.id;
   const { toast } = useToast();
+  const id = session?.user?.id;
 
-  // Ensure this code runs only on the client side
-  useEffect(() => {
-    setIsClient(true);
-  }, []);
+  const docRef = ref(database, `documents/${fileName}`);
+  const localContentRef = useRef(value); // Local content to avoid excessive re-renders
 
-  // Persist fileName to localStorage on change
+  const pathname = usePathname();
+  const router = useRouter();
+
+  useEffect(() => setIsClient(true), []);
+
   useEffect(() => {
-    if (fileName) {
-      localStorage.setItem("fileName", fileName); // Save to localStorage
-    }
+    if (fileName) localStorage.setItem("fileName", fileName);
   }, [fileName]);
 
-  // Retrieve fileName from localStorage on component mount
   useEffect(() => {
     const storedFileName = localStorage.getItem("fileName");
-    if (storedFileName) {
-      setFileName(storedFileName); // Load from localStorage
-    }
+    if (storedFileName) setFileName(storedFileName);
   }, []);
 
-  // Firebase document reference
-  const docRef = ref(database, `documents/${fileName}`);
-
-  // Listen for changes in Firebase document content
+  // Sync with Firebase only if content differs
   useEffect(() => {
     const unsubscribe = onValue(docRef, (snapshot) => {
       const data = snapshot.val();
-      if (data) {
-        setValue(data.content); // Update editor value with content from Firebase
+      if (data && data.content !== localContentRef.current) {
+        setValue(data.content);
+        localContentRef.current = data.content;
       }
     });
-
     return () => unsubscribe();
   }, [docRef]);
 
-  // Sync content to Firebase on change with debouncing
-  const handleChange = debounce((newValue) => {
-    setValue(newValue);
-    update(docRef, { content: newValue }); // Sync to Firebase in real-time
-  }, 500); // Update Firebase after 500ms delay
+  // Debounced Firebase update function
+  const debouncedUpdate = useCallback(
+    debounce((newValue) => {
+      if (newValue !== localContentRef.current) {
+        localContentRef.current = newValue;
+        update(docRef, { content: newValue });
+      }
+    }, 0),
+    [docRef]
+  );
 
-  // Function to handle save
+  // Handle editor changes without state interference
+  const handleChange = (newValue) => {
+    setValue(newValue);
+    debouncedUpdate(newValue); // Only sync to Firebase with debounced call
+  };
+
+  // Save button click
   const handleSave = async () => {
     if (!fileName) {
-      toast({ description: "Please enter a valid file name", variant: "destructive" });
+      toast({
+        description: "Please enter a valid file name",
+        variant: "destructive",
+      });
       return;
     }
-
     if (!id) {
-      toast({ description: "User session is not valid, please log in.", variant: "destructive" });
+      toast({
+        description: "User session is not valid, please log in.",
+        variant: "destructive",
+      });
       return;
     }
 
     setIsSaving(true);
     try {
-      // Save document in Firebase Realtime Database
       await set(ref(database, `documents/${fileName}`), {
         fileName,
-        type: "text", // This can be dynamic if you have other types of files
+        type: "text",
         content: value,
         createdBy: id,
-        timestamp: Date.now(), // You can also store the timestamp of when the document is created/modified
+        timestamp: Date.now(),
       });
-      
-      // Optionally, save to Redux or another state for local handling
       await dispatch(
         saveDocument({ fileName, type: "text", content: value, createdBy: id })
       );
-
-      toast({ description: "Document saved successfully.", variant: "success" });
+      toast({
+        description: "Document saved successfully.",
+        variant: "success",
+      });
     } catch (err) {
-      toast({ description: "Failed to save document.", variant: "destructive" });
+      toast({
+        description: "Failed to save document.",
+        variant: "destructive",
+      });
     } finally {
       setIsSaving(false);
     }
@@ -112,7 +122,10 @@ const RichTextEditor = () => {
   // Export document as .docx
   const exportAsDocx = () => {
     if (!fileName) {
-      toast({ description: "Please specify a file name to export.", variant: "destructive" });
+      toast({
+        description: "Please specify a file name to export.",
+        variant: "destructive",
+      });
       return;
     }
     const htmlContent = value;
@@ -151,9 +164,7 @@ const RichTextEditor = () => {
     "code-block",
   ];
 
-  const togglePreview = () => {
-    setIsPreviewOpen(!isPreviewOpen);
-  };
+  const togglePreview = () => setIsPreviewOpen(!isPreviewOpen);
 
   return (
     <>
@@ -197,21 +208,26 @@ const RichTextEditor = () => {
       <div>
         {isClient && (
           <ReactQuill
-            key={fileName}
             theme="snow"
             value={value}
-            onChange={handleChange} // Handle change in editor
+            onChange={handleChange}
             modules={modules}
             formats={formats}
-            readOnly={!fileName} // Make the editor read-only if fileName is empty
-            placeholder={fileName ? "Compose something awesome..." : "Please Specify Document Name first"}
+            readOnly={!fileName}
+            placeholder={
+              fileName
+                ? "Compose something awesome..."
+                : "Please Specify Document Name first"
+            }
           />
         )}
       </div>
 
       {/* Right Sidebar for Preview */}
       <div
-        className={`fixed top-0 right-0 overflow-y-auto md:w-1/2 w-full h-full bg-gray-50 dark:bg-neutral-900 border-l dark:border-neutral-800 shadow-lg p-4 z-50 transform transition-transform duration-300 ease-in-out ${isPreviewOpen ? "translate-x-0" : "translate-x-full"}`}
+        className={`fixed top-0 right-0 overflow-y-auto md:w-1/2 w-full h-full bg-gray-50 dark:bg-neutral-900 border-l dark:border-neutral-800 shadow-lg p-4 z-50 transform transition-transform duration-300 ease-in-out ${
+          isPreviewOpen ? "translate-x-0" : "translate-x-full"
+        }`}
       >
         <div className="flex justify-between items-center mb-4 border-b border-gray-300 dark:border-neutral-800 pb-4">
           <h2 className="text-xl font-semibold">Document Preview</h2>
@@ -229,13 +245,20 @@ const RichTextEditor = () => {
               <Download className="h-4 w-4 mr-2" />
               Export
             </Button>
-            <Button variant="outline" className="py-0 px-1" onClick={togglePreview}>
+            <Button
+              variant="outline"
+              className="py-0 px-1"
+              onClick={togglePreview}
+            >
               <X className="" />
             </Button>
           </div>
         </div>
         <div className="h-full">
-          <div dangerouslySetInnerHTML={{ __html: value }} className="custom-preview"></div>
+          <div
+            dangerouslySetInnerHTML={{ __html: value }}
+            className="custom-preview"
+          ></div>
         </div>
       </div>
     </>

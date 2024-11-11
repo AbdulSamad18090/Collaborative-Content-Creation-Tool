@@ -1,7 +1,7 @@
 "use client";
 import { useState, useEffect } from "react";
 import { useSession } from "next-auth/react";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import DahsboardHeader from "./_components/header/page";
 import DahsboardSideBar from "./_components/sidebar/page";
 import MainDashboard from "./_components/main/page";
@@ -16,6 +16,15 @@ export default function AdvancedDashboardComponent() {
   const router = useRouter();
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [activeTab, setActiveTab] = useState("dashboard");
+
+  const pathname = usePathname();
+
+  useEffect(() => {
+    // Clear fileName in local storage whenever the route changes
+    if (pathname !== "/docs/create/text") {
+      localStorage.removeItem("fileName");
+    }
+  }, [pathname]); 
 
   useEffect(() => {
     if (status === "loading") return; // Wait until session is loaded
